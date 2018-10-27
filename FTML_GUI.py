@@ -126,7 +126,8 @@ class mainWindow(wx.Frame):
         collpane = wx.CollapsiblePane(self, label="" )
         collpane.Expand() 
         pane = collpane.GetPane()
-
+        self.fps = 5
+        self.fps_limit =15
         self.paneSz= wx.BoxSizer(wx.VERTICAL) 
         self.paneSz.Add(collpane, 0,  wx.EXPAND | wx.ALL, 0)
         self.button1 = wx.Button(pane, wx.ID_ANY, "Select ROI") 
@@ -140,15 +141,13 @@ class mainWindow(wx.Frame):
         self.ROI_text = wx.StaticText(pane, wx.ID_ANY, 'not set') 
         self.ROI_text.SetFont(normal_font)
         self.fps_lbl = wx.StaticText(pane,wx.ID_ANY, "FPS: ")
-        self.fps_input = wx.TextCtrl(pane,wx.ID_ANY, "5")
+        self.fps_input = wx.TextCtrl(pane, style=wx.TE_PROCESS_ENTER )
         self.fps_input.SetFont(normal_font) 
         self.fps_lbl.SetFont(normal_font)           
         self.fps_input.Bind(wx.EVT_TEXT_ENTER, self.on_user_fps_input)
 
         self.mon = {}
         self.timer = wx.Timer(self)
-        self.fps = 5
-        self.fps_limit =15
         self.FFTrunning =0
         self.sct = mss.mss()
         # Intitialise the FFT matplotlib figure
@@ -164,7 +163,7 @@ class mainWindow(wx.Frame):
             (self.ROI_text1, 0, wx.ALIGN_CENTER ), 
             (self.ROI_text, 0, wx.ALIGN_CENTER ), 
             (self.fps_lbl,  0,wx.ALIGN_CENTER ), 
-            (self.fps_input, 0, wx.ALIGN_CENTER ) ])    
+            (self.fps_input, 0 , wx.ALIGN_CENTER ) ])    
 
         pane.SetSizer(gs)     
         self.paneSz.SetSizeHints(pane)
