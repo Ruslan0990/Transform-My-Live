@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 class ROI_panel(wx.Frame):
     def __init__(self, parent , sct):            
-        wx.Frame.__init__(self, parent, -1,'ROI selection', size=(800, 600))        
+        wx.Frame.__init__(self, parent, -1,'ROI selection', size=(600, 400))        
         self.main = parent
         save_button = wx.Button(self, label="OK" )
         save_button.SetFont( wx.Font(14, wx.DECORATIVE, wx.NORMAL, wx.BOLD)  )
@@ -108,7 +108,8 @@ class ROI_panel(wx.Frame):
             ROI_msg ='[' + str(int(self.x0))+ ',' + str(int(self.x1))+';' + str(int(self.y0))+',' + str(int(self.y1)) +']' 
             self.main.mon = {"top": int( min(self.y0,self.y1)), "left": int(min(self.x0,self.x1)), "width": int( abs(self.x1-self.x0)) , "height": int( abs(self.y1 - self.y0)) }
             self.main.ROI_text.SetLabel( ROI_msg  )   
-            self.main.ROI_text.Update()
+            self.main.ROI_text.Update()        
+            self.main.Layout()
             print('Selected ROI ....')   
             self.Close(True)
         else:
@@ -119,24 +120,27 @@ class ROI_panel(wx.Frame):
 
 class mainWindow(wx.Frame):
     def __init__(self):
-        wx.Frame.__init__(self, None , title="FTML" ,  size=(800, 900) )
+        wx.Frame.__init__(self, None , title="FTML" ,  size=(400, 600) )
         bold_font = wx.Font(14, wx.DECORATIVE, wx.NORMAL, wx.BOLD)    
         normal_font = wx.Font(14, wx.DECORATIVE, wx.NORMAL,wx.NORMAL) 
-        self.button1 = wx.Button(self, -1, "Select ROI")
+        collpane = wx.CollapsiblePane(self, label="" )
+        collpane.Expand() 
+        pane = collpane.GetPane()
+
+        self.paneSz= wx.BoxSizer(wx.VERTICAL) 
+        self.paneSz.Add(collpane, 0,  wx.EXPAND | wx.ALL, 0)
+        self.button1 = wx.Button(pane, wx.ID_ANY, "Select ROI") 
         self.button1.Bind(wx.EVT_BUTTON, self.select_ROI)     
         self.button1.SetFont(bold_font)
-        self.button2 = wx.Button(self, -1, "Start FFT")
+        self.button2 = wx.Button(pane, wx.ID_ANY, "Start FFT") 
         self.button2.Bind(wx.EVT_BUTTON, self.startFFT)     
         self.button2.SetFont(bold_font)        
-        self.ROI_text1 = wx.StaticText(self,-1,style =wx.ALIGN_CENTER_HORIZONTAL) 
-        self.ROI_text1.SetLabel( 'ROI: ')   
+        self.ROI_text1 = wx.StaticText(pane,wx.ID_ANY, 'ROI: ') 
         self.ROI_text1.SetFont(normal_font)
-        self.ROI_text = wx.StaticText(self,-1,style =wx.ALIGN_CENTER_HORIZONTAL) 
-        self.ROI_text.SetLabel( 'not set')   
+        self.ROI_text = wx.StaticText(pane, wx.ID_ANY, 'not set') 
         self.ROI_text.SetFont(normal_font)
-
-        self.fps_lbl = wx.StaticText(self, -1, "FPS: " , style =wx.ALIGN_CENTER_HORIZONTAL) 
-        self.fps_input = wx.TextCtrl(self, -1, "5", style =wx.ALIGN_CENTER_HORIZONTAL) 
+        self.fps_lbl = wx.StaticText(pane,wx.ID_ANY, "FPS: ")
+        self.fps_input = wx.TextCtrl(pane,wx.ID_ANY, "5")
         self.fps_input.SetFont(normal_font) 
         self.fps_lbl.SetFont(normal_font)           
         self.fps_input.Bind(wx.EVT_TEXT_ENTER, self.on_user_fps_input)
@@ -154,13 +158,26 @@ class mainWindow(wx.Frame):
         self.FtFig.add_axes(self.FFTaxes) 
         self.FFTcanvas = FigureCanvas(self, -1, self.FtFig)    
 
-        gs = wx.GridSizer(rows=3, cols=2, hgap=2, vgap=2)
-        gs.AddMany([self.button1, self.button2, self.ROI_text1, self.ROI_text, self.fps_lbl, self.fps_input  ])        
-        self.sizer= wx.BoxSizer(wx.VERTICAL)        
-        self.sizer.Add(gs, 0, wx.ALIGN_CENTER | wx.ALL, border=4)
-        self.sizer.AddSpacer(4) 
-        self.sizer.Add(self.FFTcanvas, 1,  wx.EXPAND|wx.TOP|wx.ALIGN_CENTER_HORIZONTAL ,5)                   
-        self.sizer.SetItemMinSize(self.FFTcanvas, (500,500))
+        gs = wx.GridSizer(rows=3, cols=2, hgap=5, vgap=5)
+        gs.AddMany([(self.button1, 0, wx.ALIGN_CENTER ),        
+            (self.button2, 0, wx.ALIGN_CENTER ), 
+            (self.ROI_text1, 0, wx.ALIGN_CENTER ), 
+            (self.ROI_text, 0, wx.ALIGN_CENTER ), 
+            (self.fps_lbl,  0,wx.ALIGN_CENTER ), 
+            (self.fps_input, 0, wx.ALIGN_CENTER ) ])    
+
+        pane.SetSizer(gs)     
+        self.paneSz.SetSizeHints(pane)
+        
+        self.sizer= wx.BoxSizer(wx.VERTICAL) 
+        self.sizer.Add(self.paneSz, 0, wx.EXPAND | wx.ALL, 0)
+        
+        sizerCanvas= wx.BoxSizer(wx.VERTICAL)         
+        sizerCanvas.Add(self.FFTcanvas, 1,  wx.EXPAND|wx.TOP|wx.ALIGN_CENTER_HORIZONTAL ,5) 
+        sizerCanvas.SetItemMinSize(self.FFTcanvas, (500,500))
+
+        self.sizer.Add(sizerCanvas, 1,  wx.EXPAND|wx.TOP|wx.ALIGN_CENTER_HORIZONTAL ,0)       
+        
         self.SetSizer(self.sizer)
         self.Layout()
         print('Initialized GUI ....')   
@@ -171,7 +188,7 @@ class mainWindow(wx.Frame):
 
     def on_user_fps_input(self, event):
         try:
-            self.fps =  int ( self.fps_input.GetValue().replace(',', '.') )     
+            self.fps =  int (self.fps_input.GetValue())     
             if  self.fps>self.fps_limit:
                  print ("I capped your fps to "+  str(self.fps_limit) )
                  self.fps = self.fps_limit
