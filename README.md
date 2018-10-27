@@ -14,8 +14,10 @@ The region of interest and the fps count can be controlled from within the GUI.
 
 ![ ](https://github.com/Ruslan0990/Transform-My-Live/raw/master/gifs/FT_live.gif)
 
+
 ## Dependancies
  * GUI written using [wxPython](http://www.wxpython.org/)
  * Figures embeddded in UI using [matplotlib](http://www.matplotlib.org)
  * Selecting an area on an image using [Rectangle Selector Panel](https://github.com/ashokfernandez/wxPython-Rectangle-Selector-Panel)
  * Screen capturing with [mss](https://github.com/BoboTiG/python-mss)
+ * Sample image credit: [link](http://www.werteloberfell.com/)
