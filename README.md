@@ -10,6 +10,10 @@ The region of interest and the fps count can be controlled from within the GUI.
 * Click on Start FFT
 * Change the desired frame rate in the textbox and accept with enter.
 
+![ ](https://github.com/Ruslan0990/Transform-My-Live/blob/master/gifs/ROI_selection.gif)
+
+![ ](https://github.com/Ruslan0990/Transform-My-Live/raw/master/gifs/FT_live.gif)
+
 ## Dependancies
  * GUI written using [wxPython](http://www.wxpython.org/)
  * Figures embeddded in UI using [matplotlib](http://www.matplotlib.org)
