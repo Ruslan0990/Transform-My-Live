@@ -1,9 +1,7 @@
 import wx  
 import numpy as np
 import mss
-import cv2
 from skimage.color import rgb2gray 
-import time
 import matplotlib       
 matplotlib.use('WXAgg')
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
