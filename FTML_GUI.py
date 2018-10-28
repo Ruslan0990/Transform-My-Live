@@ -9,6 +9,7 @@ matplotlib.use('WXAgg')
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
 
 class ROI_panel(wx.Frame):
     def __init__(self, parent , sct):            
@@ -202,9 +203,8 @@ class mainWindow(wx.Frame):
             if not self.FFTrunning:
                 self.FFTrunning =1
                 self.button2.LabelText = "Stop FFT"
-                img= rgb2gray(np.asarray(self.sct.grab(self.mon)))
-                img=np.abs(np.fft.fftshift(np.fft.fft2(img)))
-                self.FFTim = self.FFTaxes.imshow(np.log(img+1),aspect='equal', cmap= plt.cm.get_cmap('CMRmap')) 
+                img= rgb2gray(np.asarray(self.sct.grab(self.mon)))     
+                self.FFTim = self.FFTaxes.imshow(np.abs(np.fft.fftshift(np.fft.fft2(img))) ,aspect='equal', norm=colors.LogNorm(), cmap= plt.cm.get_cmap('CMRmap')) 
                 self.FFTcanvas.draw()                
                 self.timer.Start(1000./self.fps)
                 self.Bind(wx.EVT_TIMER, self.NextFrame)
@@ -219,8 +219,7 @@ class mainWindow(wx.Frame):
     
     def NextFrame(self, e):
         img= rgb2gray(np.asarray(self.sct.grab(self.mon)))
-        img=np.abs(np.fft.fftshift(np.fft.fft2(img)))
-        self.FFTim.set_array(np.log(img+1))
+        self.FFTim.set_array( np.abs(np.fft.fftshift(np.fft.fft2(img))))
         self.FFTcanvas.draw()
 
 if __name__ == "__main__":
