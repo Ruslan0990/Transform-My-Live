@@ -17,10 +17,10 @@ The region of interest and the fps count can be controlled from within the GUI.
  * GUI written using [wxPython](http://www.wxpython.org/)
  * Figures embeddded in UI using [matplotlib](http://www.matplotlib.org)
  * Screen capturing with [mss](https://github.com/BoboTiG/python-mss)
- * Sample image credit: [link](http://www.werteloberfell.com/)
 
 ## Credits
 * [Ruslan0990](https://github.com/Ruslan0990)
 * [littlechristiaan](https://github.com/littlechristiaan)
+
 * ROI selection code from [ashokfernandez](https://github.com/ashokfernandez)
- 
+* Sample image credit: [link](http://www.werteloberfell.com/)
