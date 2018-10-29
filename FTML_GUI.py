@@ -9,6 +9,8 @@ from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 
+plt.ioff()      # turn updates off
+
 class ROI_panel(wx.Frame):
     def __init__(self, parent , sct):            
         wx.Frame.__init__(self, parent, -1,'ROI selection', size=(600, 400))        
@@ -122,6 +124,7 @@ class mainWindow(wx.Frame):
         wx.Frame.__init__(self, None , title="FTML" ,  size=(400, 600) )
         bold_font = wx.Font(14, wx.DECORATIVE, wx.NORMAL, wx.BOLD)    
         normal_font = wx.Font(14, wx.DECORATIVE, wx.NORMAL,wx.NORMAL) 
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow) 
         collpane = wx.CollapsiblePane(self, label="" )
         collpane.Expand() 
         pane = collpane.GetPane()
@@ -219,6 +222,11 @@ class mainWindow(wx.Frame):
         img= rgb2gray(np.asarray(self.sct.grab(self.mon)))
         self.FFTim.set_array( np.abs(np.fft.fftshift(np.fft.fft2(img))))
         self.FFTcanvas.draw()
+        
+    def OnCloseWindow(self, event):
+        if self.FFTrunning:
+            self.timer.Stop()
+        self.Destroy()
 
 if __name__ == "__main__":
     app = wx.App()
