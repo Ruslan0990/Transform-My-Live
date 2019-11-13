@@ -19,8 +19,6 @@ The region of interest and the fps count can be controlled from within the GUI.
  * Screen capturing with [mss](https://github.com/BoboTiG/python-mss)
 
 ## Credits
-* [Ruslan0990](https://github.com/Ruslan0990)
 * [littlechristiaan](https://github.com/littlechristiaan)
-
 * ROI selection code from [ashokfernandez](https://github.com/ashokfernandez)
 * Sample image credit: [link](http://www.werteloberfell.com/)
